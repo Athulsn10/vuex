@@ -13,7 +13,7 @@
         <p>EVENTS</p>
         <p>ABOUT</p>
         <div class="ms-auto">
-            <button class="me-3 btn-dark btn">CART<i class="ms-2 fa-solid fa-cart-shopping"></i></button>
+            <button @click="navToCart()" class="me-3 btn-dark btn">CART<i class="ms-2 fa-solid fa-cart-shopping"></i></button>
         </div>
     </div>
   </div>
@@ -21,6 +21,11 @@
 
 <script>
 export default {
+  methods:{
+    navToCart(){
+      this.$router.push('/cart')
+    }
+  }
 
 }
 </script>
