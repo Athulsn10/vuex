@@ -1,18 +1,23 @@
 <template>
   <div class="container-fluid">
+    <div class="d-flex align-items-center justify-content-center w-100 ">
+      <input @keydown.enter="search" type="text" v-model="searchItem" class="form-control w-50" placeholder="Search Item">
+    </div>
     <div class="row mt-4">
-      <div class="col-lg-3 col-md-4 col-sm-2 mb-3 d-flex justify-content-center" v-for="iceCream in iceCreams" :key="iceCream.id">
+      <div class="col-lg-3 col-md-4 col-sm-2 mb-3 d-flex justify-content-center" v-for="iceCream in itemsToDisplay"
+        :key="iceCream.id">
         <div class="card" style="width: 18rem;">
-          <img
-            src="https://img.freepik.com/free-vector/ice-cream-cone-cartoon-icon-illustration-sweet-food-icon-concept-isolated-flat-cartoon-style_138676-2924.jpg?size=338&ext=jpg&ga=GA1.1.87170709.1707696000&semt=ais"
-            class="card-img-top" alt="Ice Cream Image">
+          <img loading="lazy" :src="iceCream.photo" class="card-img-top" alt="Ice Cream Image"
+            style="height: 300px; object-fit: cover;">
           <div class="card-body p-0 px-1 d-flex flex-column text-align-center">
             <div style="height: 90px;">
               <p class="fw-bolder fs-4 p-0 m-0 card-title text-center">{{ iceCream.name }}</p>
               <p class="card-text text-center p-0 m-0">Ingredients: {{ iceCream.ingredients.join(', ') }}</p>
             </div>
-            <button v-if="!iceCream.cart" class="btn btn-primary m-2" @click="addToCart(iceCream)">${{ iceCream.price }} Add to cart<i class="ms-2 fa-solid fa-heart-crack"></i></button>
-            <button v-else class="btn btn-dark m-2" @click="removeCart(iceCream)">-${{ iceCream.price }} Remove from cart<i class="ms-2 fa-solid fa-heart"></i></button>
+            <button v-if="!iceCream.cart" class="btn btn-primary m-2" @click="addToCart(iceCream)">${{ iceCream.price }}
+              Add to cart<i class="ms-2 fa-solid fa-heart-crack"></i></button>
+            <button v-else class="btn btn-dark m-2" @click="removeCart(iceCream)">-${{ iceCream.price }} Remove from
+              cart<i class="ms-2 fa-solid fa-heart"></i></button>
           </div>
         </div>
       </div>
@@ -27,8 +32,20 @@ export default {
   data() {
     return {
       iceCreams: [],
+      searchItem: '',
       url: "http://localhost:3000/iceCreams"
     };
+  },
+  computed: {
+    itemsToDisplay() {
+      if (this.searchItem.trim() === '') {
+        return this.iceCreams;
+      } else {
+        return this.iceCreams.filter((iceCream) =>
+          iceCream.name.toLowerCase().includes(this.searchItem.toLowerCase())
+        );
+      }
+    },
   },
   methods: {
     getIce() {
@@ -81,10 +98,13 @@ export default {
         });
     },
     async openCart() {
-  await this.$store.dispatch('toggleCart', true);
-  // const value = this.$store.state.isCart;
-  // console.log(value);
-}
+      await this.$store.dispatch('toggleCart', true);
+      // const value = this.$store.state.isCart;
+      // console.log(value);
+    },
+    search() {
+      console.log(this.searchItem);
+    }
 
   },
   mounted() {
