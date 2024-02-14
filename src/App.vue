@@ -1,7 +1,7 @@
 <template>
   <div class="">
     <Header/>
-    <router-view></router-view>
+    <div class="content"><router-view></router-view></div>
     <Footer/>
   </div>
 </template>
@@ -18,3 +18,8 @@ export default {
  }
 };
 </script>
+<style scoped>
+.content{
+  margin-top: 8rem;
+}
+</style>
